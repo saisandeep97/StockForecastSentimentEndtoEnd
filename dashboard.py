@@ -37,6 +37,8 @@ def run_dashboard():
         forecast,next_trading_day,model_name,results = run_forecast_pipeline(ticker, start_date, end_date)
 
     st.header(f"Model Evaluation Results for {ticker}")
+    st.write(f"Evaluation results on test dataset after performing 3 fold time series cross validation")
+
     st.dataframe(results)
     forecast = forecast.values[0] if type(forecast) == pd.Series else forecast
     # Display forecast

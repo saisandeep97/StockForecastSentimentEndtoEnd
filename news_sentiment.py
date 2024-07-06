@@ -106,8 +106,8 @@ def summarize_sentiment(articles):
             continue
         else:
             #clean article title and despcription from special characters
-            article['title'] = re.sub(r'\W', ' ', str(article['title']))
-            article['description'] = re.sub(r'\W', ' ', str(article['description']))
+            article['title'] = re.sub(r'[^a-zA-Z0-9]', ' ', str(article['title'])).strip()
+            article['description'] = re.sub(r'[^a-zA-Z0-9]', ' ', str(article['description'])).strip()
             sentiment = analyze_sentiment(article['title'] + " " + article['description'])
             data.append({
                 'date': article['publishedAt'],
