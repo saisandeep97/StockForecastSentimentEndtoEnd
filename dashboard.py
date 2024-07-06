@@ -6,7 +6,7 @@ from forecasting import run_forecast_pipeline
 from news_sentiment import get_news, summarize_sentiment
 
 # Replace with your actual NewsAPI key
-NEWS_API_KEY = st.secrets["NEWS_API_KEY"]
+NEWS_API_KEY = "3c9f7f7ea9504ff084b5aad55895839d"
 
 def plot_stock_data(data):
     fig = go.Figure()
