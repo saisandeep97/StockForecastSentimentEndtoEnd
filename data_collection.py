@@ -20,7 +20,7 @@ def get_stock_data(ticker, start_date, end_date):
         os.makedirs(DATA_DIR)
     
     # Construct file path
-    file_path = os.path.join(DATA_DIR, f"{ticker}_{start_date}_{end_date}.csv")
+    file_path = os.path.join(DATA_DIR, f"{ticker}.csv")
     
     # Check if we have recent data stored
     if os.path.exists(file_path):
@@ -30,7 +30,7 @@ def get_stock_data(ticker, start_date, end_date):
         # If stored data is up to date, return it
         if last_stored_date.strftime('%Y-%m-%d') == end_date:
             print(f"Loading data for {ticker} from CSV file.")
-            return stored_data
+            return stored_data[(pd.to_datetime(stored_data['Date'],utc=True) >= start_date) & (pd.to_datetime(stored_data['Date'],utc=True) <= end_date)]
         
         # If stored data is outdated, update it
         print(f"Updating data for {ticker}.")
@@ -40,10 +40,10 @@ def get_stock_data(ticker, start_date, end_date):
         if new_data is not None and not new_data.empty:
             updated_data = pd.concat([stored_data, new_data]).drop_duplicates().reset_index(drop=True)
             updated_data.to_csv(file_path, index=False)
-            return updated_data
+            return updated_data[(pd.to_datetime(updated_data['Date'],utc=True) >= start_date) & (pd.to_datetime(updated_data['Date'],utc=True) <= end_date)]
         else:
             print(f"No new data available for {ticker}. Using stored data.")
-            return stored_data
+            return stored_data[(pd.to_datetime(stored_data['Date'],utc=True) >= start_date) & (pd.to_datetime(stored_data['Date'],utc=True) <= end_date)]
     
     # If no stored data, fetch all data
     print(f"Fetching all data for {ticker}.")
@@ -80,39 +80,6 @@ def fetch_stock_data(ticker, start_date, end_date):
     
     except Exception as e:
         print(f"Error fetching data for {ticker}: {str(e)}")
-        return None
-
-def get_news_data(api_key, ticker, days=7):
-    """
-    Fetch news articles related to a stock using NewsAPI.
-    
-    :param api_key: Your NewsAPI key
-    :param ticker: Stock symbol (e.g., "AAPL" for Apple Inc.)
-    :param days: Number of days to look back for news articles
-    :return: List of dictionaries containing news data
-    """
-    try:
-        newsapi = NewsApiClient(api_key=api_key)
-        
-        # Calculate the date range
-        end_date = datetime.now()
-        start_date = end_date - timedelta(days=days)
-        
-        # Fetch news articles
-        articles = newsapi.get_everything(q=ticker,
-                                          from_param=start_date.strftime('%Y-%m-%d'),
-                                          to=end_date.strftime('%Y-%m-%d'),
-                                          language='en',
-                                          sort_by='relevancy')
-        
-        if articles['status'] == 'ok':
-            return articles['articles']
-        else:
-            print(f"Error fetching news for {ticker}: {articles['status']}")
-            return None
-    
-    except Exception as e:
-        print(f"Error fetching news for {ticker}: {str(e)}")
         return None
 
 def preprocess_stock_data(data):

@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from textblob import TextBlob
 import pandas as pd
 import os
-import json
+import re
 
 NEWS_DATA_DIR = "news_data"
 
@@ -24,7 +24,7 @@ def get_news(api_key, ticker, days=7):
     start_date = end_date - timedelta(days=days)
     
     # Construct file path
-    file_path = os.path.join(NEWS_DATA_DIR, f"{ticker}_news_{start_date.strftime('%Y-%m-%d')}_{end_date.strftime('%Y-%m-%d')}.csv")
+    file_path = os.path.join(NEWS_DATA_DIR, f"{ticker}_news.csv")
     
     # Check if we have recent news data stored
     if os.path.exists(file_path):
@@ -71,7 +71,7 @@ def fetch_news(api_key, ticker, start_date, end_date):
         'to': end_date.strftime('%Y-%m-%d'),
         'language': 'en',
         'sortBy': 'publishedAt',
-        'apiKey': api_key
+        'apiKey': api_key,
     }
     
     try:
@@ -105,7 +105,10 @@ def summarize_sentiment(articles):
         if article['title'] is None or article['description'] is None:
             continue
         else:
-            sentiment = analyze_sentiment(str(article['title']) + " " + str(article['description']))
+            #clean article title and despcription from special characters
+            article['title'] = re.sub(r'\W', ' ', str(article['title']))
+            article['description'] = re.sub(r'\W', ' ', str(article['description']))
+            sentiment = analyze_sentiment(article['title'] + " " + article['description'])
             data.append({
                 'date': article['publishedAt'],
                 'title': article['title'],

@@ -38,7 +38,7 @@ def select_best_model(X, y):
     print("\nModel Comparison Results:")
     print(results)
     best_model_name = results['rmse'].idxmin()
-    return models[best_model_name]
+    return models[best_model_name], results
 
 def forecast_next_day(model, data, feature_columns):
     """
@@ -80,7 +80,7 @@ def run_forecast_pipeline(ticker, start_date, end_date):
     
     
     # Select and train the best model
-    best_model = select_best_model( X.iloc[:-1], y.iloc[:-1])
+    best_model,results = select_best_model( X.iloc[:-1], y.iloc[:-1])
     best_model.fit(X.iloc[:-1], y.iloc[:-1])
     
     # Make forecast
@@ -88,7 +88,7 @@ def run_forecast_pipeline(ticker, start_date, end_date):
     last_date=pd.Timestamp(data['Date'].iloc[-1])
     nyse = mcal.get_calendar('NYSE')
     next_trading_day = nyse.valid_days(start_date=pd.to_datetime(last_date+pd.Timedelta(days=1)).strftime('%Y-%m-%d'), end_date=pd.to_datetime(last_date+pd.Timedelta(days=10)).strftime('%Y-%m-%d'))[0].strftime('%Y-%m-%d')
-    return forecast,next_trading_day,best_model.__class__.__name__
+    return forecast,next_trading_day,best_model.__class__.__name__, results
 
 # if __name__ == "__main__":
 #     from datetime import datetime

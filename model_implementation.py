@@ -13,9 +13,6 @@ class SARIMAXModel:
         self.model = None
 
     def fit(self, X, y=None):
-        print("**"*10)
-        print(X.shape)
-        print(X['Close'].head())
         self.model = SARIMAX(X['Close'], 
                              order=self.order, 
                              seasonal_order=self.seasonal_order)

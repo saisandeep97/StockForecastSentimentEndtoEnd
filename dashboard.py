@@ -6,9 +6,7 @@ from forecasting import run_forecast_pipeline
 from news_sentiment import get_news, summarize_sentiment
 
 # Replace with your actual NewsAPI key
-NEWS_API_KEY = "3c9f7f7ea9504ff084b5aad55895839d"
-
-#NEWS_API_KEY = st.secrets["NEWS_API_KEY"]
+NEWS_API_KEY = st.secrets["NEWS_API_KEY"]
 
 def plot_stock_data(data):
     fig = go.Figure()
@@ -28,7 +26,7 @@ def run_dashboard():
     st.sidebar.header("User Input")
     #ticker = st.sidebar.text_input("Enter Stock Ticker", value="AAPL")
     ticker = st.sidebar.selectbox("Select Stock Ticker", ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"])
-    days = st.sidebar.slider("Select number of days for historical data", 30, 365, 180)
+    days = st.sidebar.slider("Select number of days for historical data training", 60, 500, 500)
 
     # Calculate date range
     end_date = datetime.now().strftime('%Y-%m-%d')
@@ -36,8 +34,10 @@ def run_dashboard():
 
     # Run forecast pipeline
     with st.spinner('Fetching data and generating forecast...'):
-        forecast,next_trading_day,model_name = run_forecast_pipeline(ticker, start_date, end_date)
+        forecast,next_trading_day,model_name,results = run_forecast_pipeline(ticker, start_date, end_date)
 
+    st.header(f"Model Evaluation Results for {ticker}")
+    st.dataframe(results)
     forecast = forecast.values[0] if type(forecast) == pd.Series else forecast
     # Display forecast
     st.header(f"Stock Forecast for {ticker} by best model {model_name}")
@@ -59,7 +59,7 @@ def run_dashboard():
         if articles:
             df, summary = summarize_sentiment(articles)
             
-            st.subheader("Sentiment Summary")
+            st.subheader("Sentiment Summary for past week")
             col1, col2, col3 = st.columns(3)
             col1.metric("Average Sentiment", f"{summary['average_sentiment']:.2f}")
             col2.metric("Positive Articles", summary['positive_articles'])
