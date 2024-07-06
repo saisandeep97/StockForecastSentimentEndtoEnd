@@ -7,7 +7,7 @@ from data_collection import get_stock_data, preprocess_stock_data
 from feature_engineering import add_technical_indicators, create_lagged_features
 
 
-def evaluate_model(model, X, y, cv=5):
+def evaluate_model(model, X, y, cv=3):
     """
     Evaluate a model using time series cross-validation.
     
