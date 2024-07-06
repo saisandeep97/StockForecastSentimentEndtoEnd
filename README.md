@@ -3,7 +3,7 @@
 
 ## Project Overview
 
-This project is an end-to-end solution for stock price forecasting and news sentiment analysis. It includes data collection, preprocessing, feature engineering, model implementation, forecasting, news sentiment analysis, and a web-based dashboard. The system is designed to update daily and can be deployed automatically using GitHub Actions.
+This project is an end-to-end solution for stock price forecasting and news sentiment analysis. It includes data collection, preprocessing, feature engineering, model implementation, forecasting, news sentiment analysis, and a web-based dashboard. The system is designed to update daily and is deployed using Streamlit.
 
 ## Features
 
