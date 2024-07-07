@@ -19,6 +19,13 @@ def plot_stock_data(data):
     fig.update_layout(title='Stock Price', xaxis_title='Date', yaxis_title='Price')
     return fig
 
+def plot_actual_vs_predicted(y_train, y_train_pred):
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=y_train.index, y=y_train[0].to_list(), mode='lines', name='Actual', line=dict(color='blue')))
+    fig.add_trace(go.Scatter(x=y_train.index, y=y_train_pred, mode='lines', name='Predicted', line=dict(color='red')))
+    fig.update_layout(xaxis_title='Date', yaxis_title='Closing Price')
+    return fig
+
 def run_dashboard():
     st.title("Stock Forecast and News Sentiment Dashboard")
 
@@ -34,13 +41,14 @@ def run_dashboard():
 
     # Run forecast pipeline
     with st.spinner('Fetching data and generating forecast...'):
-        forecast,next_trading_day,model_name,results = run_forecast_pipeline(ticker, start_date, end_date)
+        forecast,next_trading_day,model_name,results,y_train,y_train_pred = run_forecast_pipeline(ticker, start_date, end_date)
 
     st.header(f"Model Evaluation Results for {ticker}")
     st.write(f"Evaluation results on test dataset after performing 3 fold time series cross validation")
 
     st.dataframe(results)
     forecast = forecast.values[0] if type(forecast) == pd.Series else forecast
+    y_train_pred = y_train_pred.values if type(y_train_pred) == pd.Series else y_train_pred
     # Display forecast
     st.header(f"Stock Forecast for {ticker} by best model {model_name}")
     st.write(f"Forecasted closing price for the next trading day {next_trading_day}: ${forecast:.2f}")
@@ -53,6 +61,10 @@ def run_dashboard():
     # Plot historical data
     st.subheader("Historical Stock Data")
     st.plotly_chart(plot_stock_data(processed_data))
+
+    # Plot historical predictions
+    st.subheader("Historical Actual vs. Predicted Closing Price for best model")
+    st.plotly_chart(plot_actual_vs_predicted(y_train, y_train_pred))
 
     # Fetch and display news sentiment
     st.header("News Sentiment Analysis")

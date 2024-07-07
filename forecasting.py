@@ -82,13 +82,15 @@ def run_forecast_pipeline(ticker, start_date, end_date):
     # Select and train the best model
     best_model,results = select_best_model( X.iloc[:-1], y.iloc[:-1])
     best_model.fit(X.iloc[:-1], y.iloc[:-1])
-    
+    y_train_pred=best_model.predict(X.iloc[:-1])
+    y_train = pd.DataFrame(y.iloc[:-1].values,index=pd.to_datetime(data['Date']).iloc[:-1].dt.date)
+
     # Make forecast
     forecast = forecast_next_day(best_model, data, feature_columns)
     last_date=pd.Timestamp(data['Date'].iloc[-1])
     nyse = mcal.get_calendar('NYSE')
     next_trading_day = nyse.valid_days(start_date=pd.to_datetime(last_date+pd.Timedelta(days=1)).strftime('%Y-%m-%d'), end_date=pd.to_datetime(last_date+pd.Timedelta(days=10)).strftime('%Y-%m-%d'))[0].strftime('%Y-%m-%d')
-    return forecast,next_trading_day,best_model.__class__.__name__, results
+    return forecast,next_trading_day,best_model.__class__.__name__, results, y_train,y_train_pred
 
 # if __name__ == "__main__":
 #     from datetime import datetime
