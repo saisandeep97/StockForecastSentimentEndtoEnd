@@ -39,7 +39,7 @@ stock-forecast-dashboard/
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/stock-forecast-dashboard.git
+   git clone https://github.com/saisandeep97/StockForecastSentimentEndtoEnd.git
    cd stock-forecast-dashboard
    ```
 
@@ -115,6 +115,3 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - [scikit-learn](https://scikit-learn.org/) for machine learning models
 - [pandas](https://pandas.pydata.org/) for data manipulation
 - [TextBlob](https://textblob.readthedocs.io/) for sentiment analysis
-You may want to customize this README further based on specific details of your implementation or any additional features you've added to the project. Also, consider adding a section on future improvements or known limitations if applicable.
-
-Remember to create a LICENSE file in your repository if you haven't already, and choose an appropriate open-source license for your project.
