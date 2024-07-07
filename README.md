@@ -29,9 +29,11 @@ stock-forecast-dashboard/
 ├── requirements.txt
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml
+│       └── update_data.yml
 ├── stock_data/
 ├── news_data/
+├── update_news_data.py
+├── update_stock_data.py
 └── README.md
 ```
 
@@ -115,3 +117,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - [scikit-learn](https://scikit-learn.org/) for machine learning models
 - [pandas](https://pandas.pydata.org/) for data manipulation
 - [TextBlob](https://textblob.readthedocs.io/) for sentiment analysis
+
+## Optional
+You can set up github actions to fetch and update the stock and news data on daily basis so that the workload on streamlit server could be reduced. 
