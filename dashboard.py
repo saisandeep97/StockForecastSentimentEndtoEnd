@@ -53,10 +53,8 @@ def run_dashboard():
     st.header(f"Stock Forecast for {ticker} by best model {model_name}")
     st.write(f"Forecasted closing price for the next trading day {next_trading_day}: ${forecast:.2f}")
 
-    # Fetch historical data
-    from data_collection import get_stock_data, preprocess_stock_data
-    stock_data = get_stock_data(ticker, start_date, end_date)
-    processed_data = preprocess_stock_data(stock_data)
+    # Load preprocessed data
+    processed_data = pd.read_csv("stock_data/preprocessed.csv")
 
     # Plot historical data
     st.subheader("Historical Stock Data")

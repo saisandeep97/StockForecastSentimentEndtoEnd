@@ -1,10 +1,10 @@
 import numpy as np
 import pandas as pd
 from statsmodels.tsa.statespace.sarimax import SARIMAX
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, SGDRegressor
 from sklearn.preprocessing import StandardScaler
 import lightgbm as lgb
-
+from sklearn import svm
 
 class SARIMAXModel:
     def __init__(self, order=(1,1,1), seasonal_order=(1,1,1,12)):
@@ -35,24 +35,51 @@ class LinearRegressionModel:
         X_scaled = self.scaler.transform(X)
         return self.model.predict(X_scaled)
 
-class LightGBMModel:
-    def __init__(self, params=None):
-        self.params = params or {
-            'objective': 'regression',
-            'metric': 'mse',
-            # 'num_leaves': 31,
-            # 'learning_rate': 0.05,
-            # 'feature_fraction': 0.9,
-            'vebose': -1
-        }
-        self.model = None
+class SVMModel:
+    def __init__(self):
+        self.model = svm.SVR()
+        self.scaler = StandardScaler()
 
     def fit(self, X, y):
-        train_data = lgb.Dataset(X, label=y)
-        self.model = lgb.train(self.params, train_data, num_boost_round=100)
+        X_scaled = self.scaler.fit_transform(X)
+        self.model.fit(X_scaled, y)
 
     def predict(self, X):
-        return self.model.predict(X)
+        X_scaled = self.scaler.transform(X)
+        return self.model.predict(X_scaled)
+    
+
+class SGDModel:
+    def __init__(self):
+        self.model = SGDRegressor()
+        self.scaler = StandardScaler()
+
+    def fit(self, X, y):
+        X_scaled = self.scaler.fit_transform(X)
+        self.model.fit(X_scaled, y)
+
+    def predict(self, X):
+        X_scaled = self.scaler.transform(X)
+        return self.model.predict(X_scaled)
+
+# class LightGBMModel:
+#     def __init__(self, params=None):
+#         self.params = params or {
+#             'objective': 'regression',
+#             'metric': 'mse',
+#             # 'num_leaves': 31,
+#             # 'learning_rate': 0.05,
+#             # 'feature_fraction': 0.9,
+#             'vebose': -1
+#         }
+#         self.model = None
+
+#     def fit(self, X, y):
+#         train_data = lgb.Dataset(X, label=y)
+#         self.model = lgb.train(self.params, train_data, num_boost_round=100)
+
+#     def predict(self, X):
+#         return self.model.predict(X)
 
 def prepare_data_for_models(data, feature_columns, target_column='Close', test_size=0.2):
     """

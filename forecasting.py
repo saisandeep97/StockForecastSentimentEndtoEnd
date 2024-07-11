@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from data_collection import get_stock_data, preprocess_stock_data
 from feature_engineering import add_technical_indicators, create_lagged_features
-from model_implementation import SARIMAXModel, LinearRegressionModel, LightGBMModel
+from model_implementation import SARIMAXModel, LinearRegressionModel, SVMModel, SGDModel
 from model_evaluation import compare_models
 import pandas_market_calendars as mcal
 
@@ -32,7 +32,8 @@ def select_best_model(X, y):
     models = {
         'SARIMAX': SARIMAXModel(),
         'Linear Regression': LinearRegressionModel(),
-        'LightGBM': LightGBMModel()
+        'SVM': SVMModel(),
+        'SGD': SGDModel()
     }
     results = compare_models(models, X, y)
     print("\nModel Comparison Results:")

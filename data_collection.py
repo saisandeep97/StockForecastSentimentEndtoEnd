@@ -108,6 +108,7 @@ def preprocess_stock_data(data):
     # Calculate volatility (20-day rolling standard deviation of returns)
     data['Volatility'] = data['Returns'].rolling(window=20).std()
     
+    data.to_csv("stock_data/preprocessed.csv", index=False)
     return data
 
 # if __name__ == "__main__":
