@@ -1,8 +1,7 @@
 import os
 from news_sentiment import get_news
-from datetime import datetime, timedelta
 
-NEWS_API_KEY = os.getenv('NEWS_API_KEY')
+NEWS_API_KEY = '3c9f7f7ea9504ff084b5aad55895839d'
 tickers = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"]
 days = 7  # Number of days of news to fetch
 
