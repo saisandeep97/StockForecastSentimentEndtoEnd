@@ -50,8 +50,8 @@ def run_dashboard():
     forecast = forecast.values[0] if type(forecast) == pd.Series else forecast
     y_train_pred = y_train_pred.values if type(y_train_pred) == pd.Series else y_train_pred
     # Display forecast
-    st.header(f"Stock Forecast for {ticker} by best model {model_name}")
-    st.write(f"Forecasted closing price for the next trading day {next_trading_day}: ${forecast:.2f}")
+    st.header(f"Forecasted closing price for {next_trading_day}: ${forecast:.2f}")
+    st.header(f"For {ticker} by {model_name}")
 
     # Load preprocessed data
     processed_data = pd.read_csv("stock_data/preprocessed.csv")
