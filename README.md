@@ -1,5 +1,5 @@
 
-# Stock Forecast and News Sentiment Dashboard
+# MarketPulse: Stock Forecasting & Sentiment Analysis
 
 ## Live Demonstration
 https://stockforecastsentimentendtoend.streamlit.app/

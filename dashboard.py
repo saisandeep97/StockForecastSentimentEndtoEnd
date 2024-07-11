@@ -27,7 +27,7 @@ def plot_actual_vs_predicted(y_train, y_train_pred):
     return fig
 
 def run_dashboard():
-    st.title("Stock Forecast and News Sentiment Dashboard")
+    st.title("MarketPulse: Stock Forecasting & Sentiment Analysis")
 
     # Sidebar for user input
     st.sidebar.header("User Input")
